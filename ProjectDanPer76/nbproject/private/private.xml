@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/C:/Users/danie/Documents/NetBeansProjects/ProjectDanPer76/src/Instrucciones/Break.java</file>
+            <file>file:/C:/Users/danie/Documents/NetBeansProjects/ProjectDanPer76/src/Simbolo/Simbolo.java</file>
+            <file>file:/C:/Users/danie/Documents/NetBeansProjects/ProjectDanPer76/src/Analizador/Parser.cup</file>
+            <file>file:/C:/Users/danie/Documents/NetBeansProjects/ProjectDanPer76/src/projectdanper76/ProjectDanPer76.java</file>
+            <file>file:/C:/Users/danie/Documents/NetBeansProjects/ProjectDanPer76/src/Expresiones/DatoNativo.java</file>
+            <file>file:/C:/Users/danie/Documents/NetBeansProjects/ProjectDanPer76/src/Instrucciones/Match.java</file>
+            <file>file:/C:/Users/danie/Documents/NetBeansProjects/ProjectDanPer76/src/Simbolo/TablaDeSimbolos.java</file>
+            <file>file:/C:/Users/danie/Documents/NetBeansProjects/ProjectDanPer76/src/Instrucciones/While.java</file>
+            <file>file:/C:/Users/danie/Documents/NetBeansProjects/ProjectDanPer76/src/Instrucciones/Prinln.java</file>
+            <file>file:/C:/Users/danie/Documents/NetBeansProjects/ProjectDanPer76/src/Analizador/Generador.java</file>
+            <file>file:/C:/Users/danie/Documents/NetBeansProjects/ProjectDanPer76/src/Errores/Errores.java</file>
+            <file>file:/C:/Users/danie/Documents/NetBeansProjects/ProjectDanPer76/src/Instrucciones/Elif.java</file>
+            <file>file:/C:/Users/danie/Documents/NetBeansProjects/ProjectDanPer76/src/Analizador/scanner.java</file>
+            <file>file:/C:/Users/danie/Documents/NetBeansProjects/ProjectDanPer76/src/Instrucciones/AsignacionVariable.java</file>
+            <file>file:/C:/Users/danie/Documents/NetBeansProjects/ProjectDanPer76/src/Expresiones/OperacionesRelacionales.java</file>
+            <file>file:/C:/Users/danie/Documents/NetBeansProjects/ProjectDanPer76/src/Expresiones/OperacionesAritmeticas.java</file>
+            <file>file:/C:/Users/danie/Documents/NetBeansProjects/ProjectDanPer76/src/Instrucciones/ObjetoMatch.java</file>
+            <file>file:/C:/Users/danie/Documents/NetBeansProjects/ProjectDanPer76/src/Instrucciones/If.java</file>
+            <file>file:/C:/Users/danie/Documents/NetBeansProjects/ProjectDanPer76/src/Expresiones/SimbolosRelacionales.java</file>
+            <file>file:/C:/Users/danie/Documents/NetBeansProjects/ProjectDanPer76/src/Instrucciones/Declaracion.java</file>
+            <file>file:/C:/Users/danie/Documents/NetBeansProjects/ProjectDanPer76/src/Analizador/Lexer.jflex</file>
+            <file>file:/C:/Users/danie/Documents/NetBeansProjects/ProjectDanPer76/src/Instrucciones/For.java</file>
+            <file>file:/C:/Users/danie/Documents/NetBeansProjects/ProjectDanPer76/src/Simbolo/Tipo.java</file>
+            <file>file:/C:/Users/danie/Documents/NetBeansProjects/ProjectDanPer76/src/Instrucciones/IfElse.java</file>
+            <file>file:/C:/Users/danie/Documents/NetBeansProjects/ProjectDanPer76/src/Analizador/parser.java</file>
+            <file>file:/C:/Users/danie/Documents/NetBeansProjects/ProjectDanPer76/src/Analizador/sym.java</file>
+            <file>file:/C:/Users/danie/Documents/NetBeansProjects/ProjectDanPer76/src/Expresiones/AccesoVariable.java</file>
+        </group>
+    </open-files>
+</project-private>

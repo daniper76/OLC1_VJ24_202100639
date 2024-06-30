@@ -1,0 +1,139 @@
+package Analizador;
+
+import java_cup.runtime.Symbol;
+import java.util.LinkedList;
+import IntruccionAbstracta.Instruccion;
+import Simbolo.Tipo;
+import Simbolo.TipoDeDato;
+import Errores.Errores;
+
+
+import Instrucciones.Prinln;
+import Instrucciones.Declaracion;
+import Instrucciones.AsignacionVariable;
+import Instrucciones.If;
+import Instrucciones.For;
+import Instrucciones.Break;
+import Instrucciones.While;
+import Instrucciones.IfElse;
+import Instrucciones.Elif;
+import Instrucciones.Match;
+import Instrucciones.ObjetoMatch;
+
+
+import Expresiones.DatoNativo;
+import Expresiones.OperacionesAritmeticas;
+import Expresiones.SimbolosAritmeticos;
+import Expresiones.SimbolosRelacionales;
+import Expresiones.OperacionesRelacionales;
+import Expresiones.AccesoVariable;
+
+parser code
+{:
+    scanner s;
+    parser(scanner s){this.s = s;}
+    public LinkedList<Errores> listaErrores = new LinkedList<>();
+    public void syntax_error(Symbol s){
+        listaErrores.add(new Errores("SINTACTICO RECUPERABLE", "No se esperaba el componente "+s.value, s.left, s.right));
+    }
+
+    public void unrecovered_syntax_error (Symbol s){
+        listaErrores.add(new Errores("SINTACTICO NO RECUPERABLE", "No se esperaba el componente "+s.value, s.left, s.right));
+    }
+
+:}
+
+action code
+{:
+:}
+
+terminal String STRING, INT, DOUBLE, ID;
+terminal PYC, PRINT, ENTERO,DECIMAL,CADENA,TRUE,FALSE,IF,BOOL;
+terminal PARIZQ, PARDER, MAS, MENOS, UMENOS, IGUAL,EQUAL;
+terminal LLAVEIZQ, LLAVEDER;
+terminal FOR, MENOR,WHILE,ELSE,MATCH,MAYOR;
+terminal String BREAK;
+
+nonterminal LinkedList<Instruccion> INICIO, INSTRUCCIONES;
+nonterminal Instruccion INSTRUCCION, PRINTLN,DECLARACION, ASIGNACION;
+nonterminal Instruccion EXPRESION;
+nonterminal Instruccion SIF;
+nonterminal Instruccion CFOR,ACTUALIZAR_FOR;
+nonterminal Instruccion CBREAK;
+nonterminal Instruccion CWHILE;
+nonterminal Instruccion CMATCH;
+nonterminal LinkedList<ObjetoMatch> INSTRUCCIONESMATCH;
+nonterminal ObjetoMatch SENTENCIASMATCH;
+nonterminal Tipo TIPOSVALORES;
+
+precedence left EQUAL,MENOR;
+precedence left MAS;
+precedence left UMENOS;
+
+start with INICIO;
+
+INICIO ::= INSTRUCCIONES:a      {:   RESULT = a;   :}
+;
+
+INSTRUCCIONES ::= INSTRUCCIONES:a INSTRUCCION:b     {: RESULT = a; RESULT.add(b); :}
+                | INSTRUCCION:a                   {: RESULT = new LinkedList<>(); RESULT.add(a); :}
+;
+
+INSTRUCCION ::= PRINTLN:a {: RESULT=a; :}
+                |DECLARACION:a {: RESULT=a; :}
+                |ASIGNACION:a {: RESULT=a; :}
+                |SIF:a        {:   RESULT=a;   :}
+                |CFOR:a       {:   RESULT=a;   :}
+                |CBREAK:a     {: RESULT=a; :}
+                |CWHILE:a     {: RESULT=a; :}
+                |CMATCH:a     {: RESULT=a; :}
+                |error PYC
+                |error
+;
+
+PRINTLN ::= PRINT PARIZQ EXPRESION:a PARDER PYC      {:   RESULT = new Prinln(a, aleft, aright);   :}
+;
+
+DECLARACION ::= TIPOSVALORES:a ID:b IGUAL EXPRESION:c PYC    {:   RESULT = new Declaracion(b, c, a, aleft, aright);   :}
+;
+ASIGNACION ::= ID:a IGUAL EXPRESION:b PYC  {:   RESULT=new AsignacionVariable(a, b, aleft, aright);  :}
+;
+
+SIF ::= IF PARIZQ EXPRESION:a PARDER LLAVEIZQ INSTRUCCIONES:b LLAVEDER  {:   RESULT = new If(a, b, aleft, aright);   :}
+       |IF PARIZQ EXPRESION:a PARDER LLAVEIZQ INSTRUCCIONES:b LLAVEDER ELSE LLAVEIZQ INSTRUCCIONES:c LLAVEDER  {:   RESULT = new IfElse(a,b,c,aleft, aright);   :}
+       |IF PARIZQ EXPRESION:a PARDER LLAVEIZQ INSTRUCCIONES:b LLAVEDER ELSE SIF:c  {:   RESULT = new Elif(a,b,c,aleft, aright);    :}
+;
+
+CMATCH ::= MATCH EXPRESION:a LLAVEIZQ INSTRUCCIONESMATCH:b LLAVEDER {: RESULT= new Match(a,b,aleft,aright); :}
+;
+INSTRUCCIONESMATCH::=INSTRUCCIONESMATCH:a SENTENCIASMATCH:b {: RESULT = a; RESULT.add(b); :}
+                    |SENTENCIASMATCH:a {: RESULT = new LinkedList<>(); RESULT.add(a);  :}
+;
+SENTENCIASMATCH::= EXPRESION:a IGUAL MAYOR LLAVEIZQ INSTRUCCIONES:b LLAVEDER {: RESULT= new ObjetoMatch(a,b); :}
+;
+CWHILE::= WHILE PARIZQ EXPRESION:a PARDER LLAVEIZQ INSTRUCCIONES:b LLAVEDER  {:   RESULT = new While(a, b, aleft, aright);   :}
+;
+CFOR ::= FOR PARIZQ ASIGNACION:a EXPRESION:b PYC ACTUALIZAR_FOR:c PARDER LLAVEIZQ INSTRUCCIONES:d LLAVEDER     
+{:   RESULT = new For(a, b, c, d, aleft, aright);   :}
+;
+ACTUALIZAR_FOR ::= ID:a IGUAL EXPRESION:b {:   RESULT=new AsignacionVariable(a, b, aleft, aright);  :}
+;
+CBREAK ::= BREAK:a PYC      {:    RESULT = new Break(aleft, aright);     :}
+;
+TIPOSVALORES ::= ENTERO       {:   RESULT=new Tipo(TipoDeDato.INT);   :}
+        | DECIMAL    {:   RESULT=new Tipo(TipoDeDato.DOUBLE);   :}
+        | CADENA    {:   RESULT=new Tipo(TipoDeDato.STRING);   :}
+        | BOOL      {:   RESULT=new Tipo(TipoDeDato.BOOLEAN);   :}
+;
+EXPRESION ::= MENOS EXPRESION:a {: RESULT= new OperacionesAritmeticas(a, SimbolosAritmeticos.NEGACION, aleft, aright); :} %prec UMENOS
+            | EXPRESION:a MAS EXPRESION:b {: RESULT= new OperacionesAritmeticas(a, b, SimbolosAritmeticos.SUMA, aleft, aright); :}
+            | EXPRESION:a IGUAL IGUAL EXPRESION:b {: RESULT= new OperacionesRelacionales(a,b,SimbolosRelacionales.IGUAL,aleft,aright); :} %prec EQUAL
+            | EXPRESION:a MENOR EXPRESION:b {: RESULT= new OperacionesRelacionales(a,b,SimbolosRelacionales.MENOR,aleft,aright); :}
+            | INT:a      {:   RESULT = new DatoNativo(Integer.parseInt(a), new Tipo(TipoDeDato.INT), aleft, aright );   :}
+            | DOUBLE:a     {:   RESULT = new DatoNativo(new Double(a), new Tipo(TipoDeDato.DOUBLE), aleft, aright );   :}
+            | STRING:a      {:   RESULT = new DatoNativo(a, new Tipo(TipoDeDato.STRING), aleft, aright );   :}
+            | TRUE:a        {:   RESULT = new DatoNativo(true, new Tipo(TipoDeDato.BOOLEAN), aleft, aright );   :}
+            | FALSE:a       {:   RESULT = new DatoNativo(false, new Tipo(TipoDeDato.BOOLEAN), aleft, aright );   :}
+            | ID:a          {:   RESULT = new AccesoVariable(a, aleft, aright);   :}
+            | PARIZQ EXPRESION:a PARDER {: RESULT=a; :}
+;
