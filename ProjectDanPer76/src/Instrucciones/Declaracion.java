@@ -18,11 +18,13 @@ import Simbolo.Tipo;
 public class Declaracion extends Instruccion {
     public String nombreVariable;
     public Instruccion valor;
+    public String mutabilidad;
 
-    public Declaracion(String nombreVariable, Instruccion valor, Tipo tipo, int linea, int columna) {
+    public Declaracion(String nombreVariable, Instruccion valor, Tipo tipo,String mutabilidad, int linea, int columna) {
         super(tipo, linea, columna);
         this.nombreVariable = nombreVariable;
         this.valor = valor;
+        this.mutabilidad=mutabilidad;
     }
 
     @Override
@@ -34,7 +36,7 @@ public class Declaracion extends Instruccion {
         if(this.valor.tipo.getTipo() != this.tipo.getTipo()){
             return new Errores("Error Semántico","Declaración De Variable Errónea, No Coinciden Tipo De Variable Con Tipo De Valor", this.linea,this.columna);
         }
-        Simbolo simbolo=new Simbolo(this.tipo,this.nombreVariable,valorInterpretado);
+        Simbolo simbolo=new Simbolo(this.tipo,this.nombreVariable,valorInterpretado,this.mutabilidad);
         boolean existe=tabla.AgregarVariable(simbolo);
         if(!existe){
             return new Errores("Error Semántico","Declaración No Completa, Nombre De Variable Ya Utilizado", this.linea,this.columna);

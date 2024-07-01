@@ -11,5 +11,12 @@ package Expresiones;
 public enum SimbolosRelacionales {
     IGUAL,
     NOIGUAL,
-    MENOR
+    MENOR,
+    MAYOR,
+    MAYORIGUAL,
+    MENORIGUAL,
+    OR,
+    AND,
+    NOT,
+    XOR
 }

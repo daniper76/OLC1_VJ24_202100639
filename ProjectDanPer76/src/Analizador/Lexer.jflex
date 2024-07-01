@@ -31,21 +31,35 @@ PARDER=")"
 LLAVEIZQ="{"
 LLAVEDER="}"
 PYC=";"
+DOSPUNTOS=":"
 MAS="+"
 MENOS="-"
+MULTIPLICACION="*"
+DIVISION="/"
+MODULO="%"
+NEGACION="!"
 MENOR="<"
 MAYOR=">"
+AND="&"
+OR="|"
+XOR="^"
 IGUAL="="
+BARRA="_"
 OMITIR=[\ \r\t\f\n]+
 INT=[0-9]+
 DOUBLE=[0-9]+"."[0-9]+
 ID=[a-zA-z][a-zA-Z0-9_]*
 STRING = [\"]([^\"])*[\"]
-
+CHAR=[\']([^\'\\]|\\[ntr]|[\\][\\]|[\\][\'])[\']
+COMENTARIO=[/][/][^\n]*
+MULTICOMENTARIO=[/][*]([^*]|\*[^/])*[*][/]
 PRINT="println"
 ENTERO="int"
+VAR="var"
+CONST="const"
 DECIMAL="double"
 CADENA="string"
+CARACTERES="char"
 IF="if"
 FOR="for"
 WHILE="while"
@@ -55,13 +69,26 @@ MATCH="match"
 TRUE="true"
 FALSE="false"
 BOOL="bool"
+DO="do"
 
 
 %%
+<YYINITIAL> {BARRA} {return new Symbol(sym.BARRA, yyline, yycolumn,yytext());}
+<YYINITIAL> {MULTIPLICACION} {return new Symbol(sym.MULTIPLICACION, yyline, yycolumn,yytext());}
+<YYINITIAL> {DIVISION} {return new Symbol(sym.DIVISION, yyline, yycolumn,yytext());}
+<YYINITIAL> {MODULO} {return new Symbol(sym.MODULO, yyline, yycolumn,yytext());}
+<YYINITIAL> {NEGACION} {return new Symbol(sym.NEGACION, yyline, yycolumn,yytext());}
+<YYINITIAL> {AND} {return new Symbol(sym.AND, yyline, yycolumn,yytext());}
+<YYINITIAL> {OR} {return new Symbol(sym.OR, yyline, yycolumn,yytext());}
+<YYINITIAL> {XOR} {return new Symbol(sym.XOR, yyline, yycolumn,yytext());}
+<YYINITIAL> {DO} {return new Symbol(sym.DO, yyline, yycolumn,yytext());}
+<YYINITIAL> {VAR} {return new Symbol(sym.VAR, yyline, yycolumn,yytext());}
+<YYINITIAL> {CONST} {return new Symbol(sym.CONST, yyline, yycolumn,yytext());}
 <YYINITIAL> {PRINT} {return new Symbol(sym.PRINT, yyline, yycolumn,yytext());}
 <YYINITIAL> {ENTERO} {return new Symbol(sym.ENTERO, yyline, yycolumn,yytext());}
 <YYINITIAL> {DECIMAL} {return new Symbol(sym.DECIMAL, yyline, yycolumn,yytext());}
 <YYINITIAL> {CADENA} {return new Symbol(sym.CADENA, yyline, yycolumn,yytext());}
+<YYINITIAL> {CARACTERES} {return new Symbol(sym.CARACTERES, yyline, yycolumn,yytext());}
 <YYINITIAL> {TRUE} {return new Symbol(sym.TRUE, yyline, yycolumn,yytext());}
 <YYINITIAL> {FALSE} {return new Symbol(sym.FALSE, yyline, yycolumn,yytext());}
 <YYINITIAL> {FOR} {return new Symbol(sym.FOR, yyline, yycolumn,yytext());}
@@ -79,8 +106,13 @@ BOOL="bool"
     cadena = cadena.substring(1, cadena.length()-1);
     return new Symbol(sym.STRING, yyline, yycolumn,cadena);
     }
-
+<YYINITIAL> {CHAR} {
+    String caracter = yytext();
+    caracter = caracter.substring(1, caracter.length()-1);
+    return new Symbol(sym.CHAR, yyline, yycolumn,caracter);
+    }
 <YYINITIAL> {PYC} {return new Symbol(sym.PYC, yyline, yycolumn,yytext());}
+<YYINITIAL> {DOSPUNTOS} {return new Symbol(sym.DOSPUNTOS, yyline, yycolumn,yytext());}
 <YYINITIAL> {PARIZQ} {return new Symbol(sym.PARIZQ, yyline, yycolumn,yytext());}
 <YYINITIAL> {PARDER} {return new Symbol(sym.PARDER, yyline, yycolumn,yytext());}
 <YYINITIAL> {LLAVEIZQ} {return new Symbol(sym.LLAVEIZQ, yyline, yycolumn,yytext());}
@@ -90,5 +122,7 @@ BOOL="bool"
 <YYINITIAL> {IGUAL} {return new Symbol(sym.IGUAL, yyline, yycolumn,yytext());}
 <YYINITIAL> {MENOR} {return new Symbol(sym.MENOR, yyline, yycolumn,yytext());}
 <YYINITIAL> {MAYOR} {return new Symbol(sym.MAYOR, yyline, yycolumn,yytext());}
+<YYINITIAL> {COMENTARIO} {}
+<YYINITIAL> {MULTICOMENTARIO} {}
 <YYINITIAL> {OMITIR} {}
 <YYINITIAL> .        { listaErrores.add(new Errores("LEXICO","El caracter "+yytext()+" NO pertenece al lenguaje", yyline, yycolumn)); }

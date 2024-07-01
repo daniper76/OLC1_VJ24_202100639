@@ -15,39 +15,35 @@ import Simbolo.TipoDeDato;
  *
  * @author danie
  */
-public class AsignacionVariable extends Instruccion {
+public class Decremento extends Instruccion {
     private String Identificador;
-    private Instruccion nuevoValor;
 
-    public AsignacionVariable(String Identificador, Instruccion nuevoValor, int linea, int columna) {
+    public Decremento(String Identificador, int linea, int columna) {
         super(new Tipo(TipoDeDato.VOID), linea, columna);
         this.Identificador = Identificador;
-        this.nuevoValor = nuevoValor;
     }
-
+    
     @Override
     public Object Interpretar(Arbol arbol, TablaDeSimbolos tabla) {
         var variable=tabla.ObtenerVariable(this.Identificador);
         if(variable==null){
-            return new Errores("Error Semántico", "La Variable No Existe",
-                    this.linea, this.columna);
-            }
-        var nuevo=this.nuevoValor.Interpretar(arbol, tabla);
-        if(nuevo instanceof Errores){
-            return nuevo;
+            return new Errores("Error Semántico", "La Variable No Existe", this.linea, this.columna);
         }
-        if(variable.getTipo().getTipo() != this.nuevoValor.tipo.getTipo()){
-            return new Errores("Error Semántico", "Tipos De Datos No Coinciden",
-                    this.linea, this.columna);
+        if((variable.getTipo().getTipo() != TipoDeDato.INT)&&(variable.getTipo().getTipo() != TipoDeDato.DOUBLE)){
+            return new Errores("Error Semántico", "Tipos De Datos No Coinciden", this.linea, this.columna);
         }
         if(variable.getMutabilidad().equalsIgnoreCase("const")){
-            return new Errores("Error Semántico", "No Se Puede Modificar Una Variable Const",
-                    this.linea, this.columna);
+            return new Errores("Error Semántico", "No Se Puede Modificar Una Variable Const", this.linea, this.columna);
+        }
+        Object nuevo=null;
+        if(variable.getTipo().getTipo() == TipoDeDato.INT){
+            nuevo=(int)variable.getValor()-(int)1;
+        }
+        if(variable.getTipo().getTipo() == TipoDeDato.DOUBLE){
+            nuevo=(double)variable.getValor()-(double)1;
         }
         variable.setValor(nuevo);
         return null;
-     }
-        
-    
+    }
     
 }
