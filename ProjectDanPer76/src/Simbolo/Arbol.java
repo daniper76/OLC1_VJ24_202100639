@@ -56,7 +56,78 @@ public class Arbol {
     public void setErrores(LinkedList<Errores> errores) {
         this.errores = errores;
     }
-        public void CrearCadenaConsola(String valor) {
+    public void CrearCadenaConsola(String valor) {
+        int tamanioCadena=valor.length();
+        int siglas=0;
+        String cadenaEvaluar=valor;
+        
+        for(int i=0;i<tamanioCadena;i++){
+            switch(cadenaEvaluar.charAt(i)){
+                case '\\'->{
+                    switch(cadenaEvaluar.charAt(i+1)){
+                        case 'n'->{
+                            
+                            if(i==0){
+                                this.cadenaResultado+="\n";
+                                valor=valor.substring(2);
+                                siglas=siglas+2;
+                            }else if(i==tamanioCadena-2){
+                                this.cadenaResultado+=valor.substring(0,i-siglas)+"\n";
+                                valor="";
+                            }else{
+                                this.cadenaResultado+=valor.substring(0,i-siglas)+"\n";
+                                int quitado=valor.substring(0,i-siglas+2).length();
+                                valor=valor.substring(i-siglas+2);
+                                siglas+=quitado;
+                            }
+                            break;
+
+                        }
+                        case 't'->{
+                            if(i==0){
+                                this.cadenaResultado+="\t";
+                                valor=valor.substring(2);
+                                siglas=siglas+2;
+                            }else if(i==tamanioCadena-2){
+                                this.cadenaResultado+=valor.substring(0,i-siglas)+"\t";
+                                valor="";
+                            }else{
+                                this.cadenaResultado+=valor.substring(0,i-siglas)+"\t";
+                                int quitado=valor.substring(0,i-siglas+2).length();
+                                valor=valor.substring(i-siglas+2);
+                                siglas+=quitado;
+                            }
+                            break;
+
+                        }
+                        case 'r'->{
+                            if(i==0){
+                                this.cadenaResultado+="\r";
+                                valor=valor.substring(2);
+                                siglas=siglas+2;
+                            }else if(i==tamanioCadena-2){
+                                this.cadenaResultado+=valor.substring(0,i-siglas)+"\r";
+                                valor="";
+                            }else{
+                                this.cadenaResultado+=valor.substring(0,i-siglas)+"\r";
+                                int quitado=valor.substring(0,i-siglas+2).length();
+                                valor=valor.substring(i-siglas+2);
+                                siglas+=quitado;
+                            }
+                            break;
+                        }                
+                    }
+                }
+                default->{
+                    
+                    
+                    break;
+                }
+                
+            }
+            
+        }
+        
         this.cadenaResultado += valor + "\n";
     }
     

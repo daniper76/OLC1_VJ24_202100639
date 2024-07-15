@@ -12,53 +12,50 @@ public class sym {
   public static final int CONST = 19;
   public static final int CHAR = 6;
   public static final int ENTERO = 10;
-  public static final int XOR = 37;
+  public static final int XOR = 33;
   public static final int DOUBLE = 4;
-  public static final int LLAVEDER = 42;
+  public static final int CONTINUE = 48;
+  public static final int LLAVEDER = 38;
   public static final int INT = 3;
   public static final int CARACTERES = 17;
-  public static final int FOR = 43;
-  public static final int MATCH = 47;
-  public static final int NOT = 38;
-  public static final int AND = 36;
-  public static final int MENORIGUAL = 26;
-  public static final int IGUAL = 28;
-  public static final int OR = 35;
+  public static final int FOR = 39;
+  public static final int MATCH = 43;
+  public static final int NOT = 34;
+  public static final int AND = 32;
+  public static final int IGUAL = 26;
+  public static final int OR = 31;
   public static final int BOOL = 16;
   public static final int IF = 15;
   public static final int UMENOS = 24;
   public static final int ID = 5;
-  public static final int MAYORIGUAL = 27;
   public static final int EOF = 0;
   public static final int PARIZQ = 20;
   public static final int DECIMAL = 11;
-  public static final int EQUAL = 29;
   public static final int TRUE = 13;
   public static final int error = 1;
   public static final int CADENA = 12;
   public static final int SQUARE = 25;
-  public static final int MODULO = 32;
-  public static final int NEGACION = 33;
+  public static final int MODULO = 29;
+  public static final int NEGACION = 30;
   public static final int MENOS = 23;
-  public static final int MENOR = 44;
-  public static final int COR = 39;
-  public static final int BREAK = 51;
-  public static final int MAYOR = 48;
-  public static final int BARRA = 49;
-  public static final int ELSE = 46;
-  public static final int WHILE = 45;
-  public static final int NOTEQUALS = 34;
-  public static final int LLAVEIZQ = 41;
-  public static final int CAND = 40;
+  public static final int MENOR = 40;
+  public static final int COR = 35;
+  public static final int BREAK = 47;
+  public static final int MAYOR = 44;
+  public static final int BARRA = 45;
+  public static final int ELSE = 42;
+  public static final int WHILE = 41;
+  public static final int LLAVEIZQ = 37;
+  public static final int CAND = 36;
   public static final int STRING = 2;
   public static final int FALSE = 14;
   public static final int PARDER = 21;
-  public static final int DIVISION = 31;
+  public static final int DIVISION = 28;
   public static final int VAR = 18;
-  public static final int DO = 50;
+  public static final int DO = 46;
   public static final int PRINT = 9;
   public static final int PYC = 7;
-  public static final int MULTIPLICACION = 30;
+  public static final int MULTIPLICACION = 27;
   public static final int MAS = 22;
   public static final String[] terminalNames = new String[] {
   "EOF",
@@ -87,15 +84,11 @@ public class sym {
   "MENOS",
   "UMENOS",
   "SQUARE",
-  "MENORIGUAL",
-  "MAYORIGUAL",
   "IGUAL",
-  "EQUAL",
   "MULTIPLICACION",
   "DIVISION",
   "MODULO",
   "NEGACION",
-  "NOTEQUALS",
   "OR",
   "AND",
   "XOR",
@@ -112,7 +105,8 @@ public class sym {
   "MAYOR",
   "BARRA",
   "DO",
-  "BREAK"
+  "BREAK",
+  "CONTINUE"
   };
 }
 

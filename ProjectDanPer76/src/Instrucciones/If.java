@@ -41,8 +41,14 @@ public class If extends Instruccion{
                 if(i instanceof Break){
                     return i;
                 }
+                if(i instanceof Continue){
+                    return i;
+                }
                 var resultado=i.Interpretar(arbol, NuevaTabla);
                 if(resultado instanceof Break){
+                    return resultado;
+                }
+                if(resultado instanceof Continue){
                     return resultado;
                 }
                 if(resultado instanceof Errores){

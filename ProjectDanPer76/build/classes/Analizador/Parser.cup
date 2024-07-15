@@ -27,6 +27,7 @@ import Instrucciones.Incremento;
 import Instrucciones.Casteo;
 import Instrucciones.CasteoAsignacion;
 import Instrucciones.DeclaracionPorDefecto;
+import Instrucciones.Continue;
 
 
 import Expresiones.DatoNativo;
@@ -35,6 +36,7 @@ import Expresiones.SimbolosAritmeticos;
 import Expresiones.SimbolosRelacionales;
 import Expresiones.OperacionesRelacionales;
 import Expresiones.AccesoVariable;
+import Expresiones.CasteoPrint;
 
 parser code
 {:
@@ -57,17 +59,17 @@ action code
 
 terminal String STRING, INT, DOUBLE, ID, CHAR;
 terminal PYC,DOSPUNTOS,PRINT, ENTERO,DECIMAL,CADENA,TRUE,FALSE,IF,BOOL,CARACTERES,VAR,CONST;
-terminal PARIZQ, PARDER, MAS, MENOS, UMENOS,SQUARE,MENORIGUAL,MAYORIGUAL, IGUAL,EQUAL,MULTIPLICACION,DIVISION,MODULO,NEGACION,NOTEQUALS,OR,AND,XOR,NOT,COR,CAND;
+terminal PARIZQ, PARDER, MAS, MENOS, UMENOS,SQUARE,IGUAL,MULTIPLICACION,DIVISION,MODULO,NEGACION,OR,AND,XOR,NOT,COR,CAND;
 terminal LLAVEIZQ, LLAVEDER;
 terminal FOR, MENOR,WHILE,ELSE,MATCH,MAYOR,BARRA,DO;
-terminal String BREAK;
+terminal String BREAK,CONTINUE;
 
 nonterminal LinkedList<Instruccion> INICIO, INSTRUCCIONES;
 nonterminal Instruccion INSTRUCCION, PRINTLN,DECLARACION, ASIGNACION,DECREMENTO,INCREMENTO;
 nonterminal Instruccion EXPRESION;
 nonterminal Instruccion SIF;
 nonterminal Instruccion CFOR,ACTUALIZAR_FOR;
-nonterminal Instruccion CBREAK;
+nonterminal Instruccion CBREAK,CCONTINUE;
 nonterminal Instruccion CWHILE;
 nonterminal Instruccion CMATCH;
 nonterminal Instruccion CDOWHILE, CASTEO;
@@ -80,7 +82,7 @@ precedence left COR;
 precedence left CAND;
 precedence left XOR;
 precedence left NOT;
-precedence left EQUAL,MENOR,NOTEQUALS,MAYOR,MAYORIGUAL,MENORIGUAL;
+precedence left IGUAL,MENOR,MAYOR;
 precedence left MAS,MENOS;
 precedence left MULTIPLICACION,DIVISION;
 precedence left MODULO;
@@ -102,6 +104,7 @@ INSTRUCCION ::= PRINTLN:a {: RESULT=a; :}
                 |SIF:a        {:   RESULT=a;   :}
                 |CFOR:a       {:   RESULT=a;   :}
                 |CBREAK:a     {: RESULT=a; :}
+                |CCONTINUE:a     {: RESULT=a; :}
                 |CWHILE:a     {: RESULT=a; :}
                 |CMATCH:a     {: RESULT=a; :}
                 |CDOWHILE:a   {: RESULT=a; :}
@@ -113,6 +116,7 @@ INSTRUCCION ::= PRINTLN:a {: RESULT=a; :}
 ;
 
 PRINTLN ::= PRINT PARIZQ EXPRESION:a PARDER PYC      {:   RESULT = new Prinln(a, aleft, aright);   :}
+          | PRINT PARIZQ EXPRESION:c MAS PARIZQ PARIZQ TIPOSVALORES:b PARDER EXPRESION:a PARDER PARDER PYC{: RESULT=new Prinln(new OperacionesAritmeticas(c, new CasteoPrint(a,b,aleft, aright), SimbolosAritmeticos.SUMA, aleft, aright), aleft, aright); :}
 ;
 
 DECLARACION ::= TIPOMUTABILIDAD:d ID:b DOSPUNTOS TIPOSVALORES:a IGUAL EXPRESION:c PYC    {:   RESULT = new Declaracion(b, c, a, d,aleft, aright);   :}
@@ -149,11 +153,13 @@ ACTUALIZAR_FOR ::= ID:a IGUAL EXPRESION:b {:   RESULT=new AsignacionVariable(a, 
                   |ID:a MENOS MENOS {: RESULT=new Decremento(a,aleft, aright); :}
 ;
 
-INCREMENTO ::= ID:a MAS MAS {: RESULT=new Incremento(a,aleft, aright); :}
+INCREMENTO ::= ID:a MAS MAS PYC {: RESULT=new Incremento(a,aleft, aright); :}
 ;
-DECREMENTO ::= ID:a MENOS MENOS {: RESULT=new Decremento(a,aleft, aright); :}
+DECREMENTO ::= ID:a MENOS MENOS PYC{: RESULT=new Decremento(a,aleft, aright); :}
 ;
 CBREAK ::= BREAK:a PYC      {:    RESULT = new Break(aleft, aright);     :}
+;
+CCONTINUE ::= CONTINUE:a PYC      {:    RESULT = new Continue(aleft, aright);     :}
 ;
 TIPOSVALORES ::= ENTERO       {:   RESULT=new Tipo(TipoDeDato.INT);   :}
         | DECIMAL    {:   RESULT=new Tipo(TipoDeDato.DOUBLE);   :}
@@ -171,12 +177,12 @@ EXPRESION ::= MENOS EXPRESION:a {: RESULT= new OperacionesAritmeticas(a, Simbolo
             | EXPRESION:a DIVISION EXPRESION:b {: RESULT= new OperacionesAritmeticas(a, b, SimbolosAritmeticos.DIVISION, aleft, aright); :}
             | EXPRESION:a MULTIPLICACION MULTIPLICACION EXPRESION:b {: RESULT= new OperacionesAritmeticas(a, b, SimbolosAritmeticos.POTENCIA, aleft, aright); :} %prec SQUARE
             | EXPRESION:a MODULO EXPRESION:b {: RESULT= new OperacionesAritmeticas(a, b, SimbolosAritmeticos.MODULO, aleft, aright); :}
-            | EXPRESION:a IGUAL IGUAL EXPRESION:b {: RESULT= new OperacionesRelacionales(a,b,SimbolosRelacionales.IGUAL,aleft,aright); :} %prec EQUAL
-            | EXPRESION:a NEGACION IGUAL EXPRESION:b {: RESULT= new OperacionesRelacionales(a,b,SimbolosRelacionales.NOIGUAL,aleft,aright); :} %prec NOTEQUALS
+            | EXPRESION:a IGUAL IGUAL EXPRESION:b {: RESULT= new OperacionesRelacionales(a,b,SimbolosRelacionales.IGUAL,aleft,aright); :} 
+            | EXPRESION:a NEGACION IGUAL EXPRESION:b {: RESULT= new OperacionesRelacionales(a,b,SimbolosRelacionales.NOIGUAL,aleft,aright); :} 
             | EXPRESION:a MENOR EXPRESION:b {: RESULT= new OperacionesRelacionales(a,b,SimbolosRelacionales.MENOR,aleft,aright); :}
             | EXPRESION:a MAYOR EXPRESION:b {: RESULT= new OperacionesRelacionales(a,b,SimbolosRelacionales.MAYOR,aleft,aright); :}
-            | EXPRESION:a MAYOR IGUAL EXPRESION:b {: RESULT= new OperacionesRelacionales(a,b,SimbolosRelacionales.MAYORIGUAL,aleft,aright); :} %prec MAYORIGUAL
-            | EXPRESION:a MENOR IGUAL EXPRESION:b {: RESULT= new OperacionesRelacionales(a,b,SimbolosRelacionales.MENORIGUAL,aleft,aright); :} %prec MENORIGUAL
+            | EXPRESION:a MAYOR IGUAL EXPRESION:b {: RESULT= new OperacionesRelacionales(a,b,SimbolosRelacionales.MAYORIGUAL,aleft,aright); :} 
+            | EXPRESION:a MENOR IGUAL EXPRESION:b {: RESULT= new OperacionesRelacionales(a,b,SimbolosRelacionales.MENORIGUAL,aleft,aright); :} 
             | EXPRESION:a AND AND EXPRESION:b {: RESULT= new OperacionesRelacionales(a,b,SimbolosRelacionales.AND,aleft,aright); :} %prec CAND
             | EXPRESION:a OR OR EXPRESION:b {: RESULT= new OperacionesRelacionales(a,b,SimbolosRelacionales.OR,aleft,aright); :} %prec COR
             | EXPRESION:a XOR EXPRESION:b {: RESULT= new OperacionesRelacionales(a,b,SimbolosRelacionales.XOR,aleft,aright); :}

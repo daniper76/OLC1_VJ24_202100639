@@ -38,13 +38,20 @@ public class While extends Instruccion{
         }
         var NuevaTabla= new TablaDeSimbolos(tabla);
         while ((boolean) this.condicion.Interpretar(arbol, NuevaTabla)){
+            var NuevaTabla2=new TablaDeSimbolos(NuevaTabla);
             for(var i: this.instrucciones){
                 if(i instanceof Break){
                     return null;
                 }
-                var instruccionObtenida=i.Interpretar(arbol, NuevaTabla);
+                if(i instanceof Continue){
+                    break;
+                }
+                var instruccionObtenida=i.Interpretar(arbol,NuevaTabla2);
                 if(instruccionObtenida instanceof Break){
                     return null;
+                }
+                if(instruccionObtenida instanceof Continue){
+                    break;
                 }
             }
         }

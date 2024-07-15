@@ -38,11 +38,12 @@ public class DoWhile extends Instruccion {
         }
         var NuevaTabla= new TablaDeSimbolos(tabla);
         do{
+            var NuevaTabla2=new TablaDeSimbolos(NuevaTabla);
             for(var i: this.instrucciones){
                 if(i instanceof Break){
                     return null;
                 }
-                var instruccionObtenida=i.Interpretar(arbol, NuevaTabla);
+                var instruccionObtenida=i.Interpretar(arbol, NuevaTabla2);
                 if(instruccionObtenida instanceof Break){
                     return null;
                 }

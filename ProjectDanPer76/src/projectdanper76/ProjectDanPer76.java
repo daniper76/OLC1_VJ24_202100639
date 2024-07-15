@@ -24,7 +24,8 @@ public class ProjectDanPer76 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-         try {
+            Interfaz entorno= new Interfaz();
+            entorno.setVisible(true);
             String texto = ""
                     + "println(\"true\"==\"true\");  println(2+2); println(\"hola\"==\"HoLa\");"
                     + "var a:string=\"hola\";"
@@ -257,7 +258,11 @@ public class ProjectDanPer76 {
                       println("Logica3 "+logica3);
                       println("valor por defecto"+(total==0));
                      """;
-            scanner s = new scanner(new BufferedReader(new StringReader(texto)));
+     }
+    
+    public static void Analizar(String entrada){
+        try{
+            scanner s = new scanner(new BufferedReader(new StringReader(entrada)));
             parser p = new parser(s);
             var resultado = p.parse();
             var ast = new Arbol((LinkedList<Instruccion>) resultado.value);
@@ -280,11 +285,14 @@ public class ProjectDanPer76 {
             System.out.println(ast.getCadenaResultado());
             for (var i : lista) {
                 System.out.println(i);
+                ast.CrearCadenaConsola(i.toString());
             }
+            cadena.cadena.cadenaConsola=ast.getCadenaResultado();
             } catch (Exception ex) {
             System.out.println("Algo salio mal");
             System.out.println(ex);
-        }
-     }
+            }
+    
+    }
     
 }
